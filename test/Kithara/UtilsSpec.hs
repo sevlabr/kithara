@@ -1,6 +1,6 @@
-module LibSpec (spec) where
+module Kithara.UtilsSpec (spec) where
 
-import Lib
+import Kithara.Utils
 import Test.Hspec
 import Test.Hspec.QuickCheck
 import Control.Exception (evaluate)

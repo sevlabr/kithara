@@ -25,7 +25,10 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Kithara.IO
+      Kithara.Ops
+      Kithara.Types
+      Kithara.Utils
   other-modules:
       Paths_kithara
   hs-source-dirs:
@@ -53,7 +56,7 @@ test-suite kithara-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      LibSpec
+      Kithara.UtilsSpec
       SpecHook
       Paths_kithara
   hs-source-dirs:
