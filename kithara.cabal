@@ -43,6 +43,8 @@ library
 executable kithara-exe
   main-is: Main.hs
   other-modules:
+      Config
+      Sounds
       Paths_kithara
   hs-source-dirs:
       app

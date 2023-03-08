@@ -47,11 +47,11 @@ instance Oscillator Note where
     square s v n = oscillate f s v n
         where
             -- point-free: ((signum .) .) . sinFT
-            f fq t s = signum $ sinFT fq t s
+            f fq t s' = signum $ sinFT fq t s'
 
     triangle s v n = oscillate f s v' n
         where
-            f fq t s = asin $ sinFT fq t s
+            f fq t s' = asin $ sinFT fq t s'
             v' = (2 / pi) * v
 
     -- the less the k the smoother the sound
@@ -65,11 +65,11 @@ instance Oscillator Note where
             genWave i = oscillate f s 1.0 n
                 where
                     i' = fromIntegral i
-                    f fq t s = (sin $ i' * fq * t / s) / i'
+                    f fq t s' = (sin $ i' * fq * t / s') / i'
     
     sawSharp s v n = oscillate f s v' n
         where
             v' = (2 / pi) * v
-            f fq t s = (pi / 2) - fq' * pi * (fmod (t / s) (1.0 / fq'))
+            f fq t s' = (pi / 2) - fq' * pi * (fmod (t / s') (1.0 / fq'))
                 where
                     fq' = fq / (2 * pi)

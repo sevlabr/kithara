@@ -23,3 +23,7 @@ fmod n d = n - dt
 -- |Combine consecutive sounds into one.
 compose :: [Sound] -> Sound
 compose sounds = concat sounds
+
+-- |Get Quarter Note duration in seconds.
+quarterDuration :: Beats -> Seconds
+quarterDuration bpm = 60.0 / (fromIntegral bpm)

@@ -1,6 +1,10 @@
 module Main (main) where
 
--- import Lib
+import Kithara.IO
+import Sounds (song)
+import Config
 
 main :: IO ()
-main = putStrLn "main"
+main = do
+    saveSong song outFileName
+    playSong outFileName samples showMode fileEncoding

@@ -9,78 +9,36 @@ and playing it via [ffplay](https://ffmpeg.org/ffplay.html) ('play'').
 module Kithara.IO where
 
 import Kithara.Types
-import Kithara.Utils
-import Kithara.Ops
 import qualified Data.ByteString.Builder as BSBuilder
 import qualified Data.ByteString.Lazy as BSLazy
 import System.Process (runCommand)
 import Text.Printf (printf)
 import Data.Foldable (fold)
 
-outFileName :: FilePath
-outFileName = "output.bin"
-
-volume :: Volume
-volume = 0.2
-
-samples :: Samples
-samples = 44100
-
-a4Base :: Hz
-a4Base = 440.0
-
-beatsPerMinute :: Beats
-beatsPerMinute = 120
-
-quaterDuartion :: Seconds
-quaterDuartion = 60.0 / (fromIntegral beatsPerMinute)
-
-a4Quater :: Note
-a4Quater = Note { frequency = a4Base, duration = quaterDuartion}
-
+-- |Convert 'Kithara.Sound' to a
+-- [BSLazy.ByteString](https://hackage.haskell.org/package/bytestring-0.11.4.0/docs/Data-ByteString-Lazy.html#t:ByteString).
 soundToByteString :: Sound -> BSLazy.ByteString
 soundToByteString s = BSBuilder.toLazyByteString $ fold builders
     where
         builders = map BSBuilder.floatLE s
 
+-- |Save
+-- [BSLazy.ByteString](https://hackage.haskell.org/package/bytestring-0.11.4.0/docs/Data-ByteString-Lazy.html#t:ByteString)
+-- to a file with provided path.
 saveByteStringSound :: FilePath -> BSLazy.ByteString -> IO ()
 saveByteStringSound fp bs = BSLazy.writeFile fp bs
 
-a4QuaterSound :: Sound
-a4QuaterSound = sinusoid samples volume a4Quater
+-- |Save 'Kithara.Sound' to a file with provided path.
+saveSong :: Sound -> FilePath -> IO ()
+saveSong s fp = saveByteStringSound fp (soundToByteString s)
 
-a4QuaterSoundSquare :: Sound
-a4QuaterSoundSquare = square samples volume a4Quater
-
-a4QuaterSoundTriangle :: Sound
-a4QuaterSoundTriangle = triangle samples volume a4Quater
-
-a4QuaterSoundSawSmooth5 :: Sound
-a4QuaterSoundSawSmooth5 = sawSmooth samples 5 volume a4Quater
-
-a4QuaterSoundSawSharp :: Sound
-a4QuaterSoundSawSharp = sawSharp samples volume a4Quater
-
-a4QuaterByteString :: BSLazy.ByteString
-a4QuaterByteString = soundToByteString a4QuaterSound
-
-song :: Sound
-song = compose [a4QuaterSound, a4QuaterSoundSquare,
-                a4QuaterSoundTriangle, a4QuaterSound,
-                a4QuaterSoundSawSmooth5, a4QuaterSoundSawSharp]
-
-songByteString :: BSLazy.ByteString
-songByteString = soundToByteString song
-
-save' :: IO ()
-save' = saveByteStringSound outFileName songByteString
-
-play' :: IO ()
-play' = do
-    _ <- runCommand $ printf "ffplay -autoexit -showmode 1 -f f32le -ar %d %s" samples outFileName
+-- |Play a sound stored in a file with provided path using
+-- [ffplay](https://ffmpeg.org/ffplay.html).
+playSong :: FilePath
+         -> Samples
+         -> Int      -- ^ Showmode for ffplay (0, 1 or 2).
+         -> String   -- ^ File encoding (e.g. f32le).
+         -> IO ()
+playSong fp s shm enc = do
+    _ <- runCommand $ printf "ffplay -autoexit -showmode %d -f %s -ar %d %s" shm enc s fp
     return ()
-
-run' :: IO ()
-run' = do
-    save'
-    play'
