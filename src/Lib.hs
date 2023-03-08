@@ -1,10 +1,4 @@
--- module Lib
---     ( someFunc
---     ) where
 module Lib where
-
--- someFunc :: IO ()
--- someFunc = putStrLn "someFunc"
 
 import qualified Data.ByteString.Builder as BSBuilder
 import qualified Data.ByteString.Lazy as BSLazy
@@ -32,10 +26,11 @@ class Oscillator a where
     sawSmooth :: Int -> Volume -> a -> Sound
     sawSharp :: Volume -> a -> Sound
 
-sinFT :: (Hz -> Seconds -> Float -> Oscillation)
+sinFT :: Hz -> Seconds -> Float -> Oscillation
 sinFT freq t samples' = sin $ freq * t / samples'
 
-fmod :: (Float -> Float -> Float)
+fmod :: Float -> Float -> Float
+fmod n 0 = error "Exception: Ratio has zero denominator"
 fmod n d = n - dt
     where
         t = truncate $ n / d
