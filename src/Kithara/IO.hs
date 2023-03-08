@@ -4,7 +4,7 @@ Description : Common IO operations.
 This module contains basic IO primitives that can be useful
 in the context of a sound creation.
 Examples include converting a melody to a ByteString ('soundToByteString')
-and playing it via [ffplay](https://ffmpeg.org/ffplay.html) ('play'').
+and playing it via [ffplay](https://ffmpeg.org/ffplay.html) ('playSong').
 -}
 module Kithara.IO where
 
@@ -37,7 +37,7 @@ saveSong s fp = saveByteStringSound fp (soundToByteString s)
 playSong :: FilePath
          -> Samples
          -> Int      -- ^ Showmode for ffplay (0, 1 or 2).
-         -> String   -- ^ File encoding (e.g. f32le).
+         -> String   -- ^ File encoding (e.g. "f32le").
          -> IO ()
 playSong fp s shm enc = do
     _ <- runCommand $ printf "ffplay -autoexit -showmode %d -f %s -ar %d %s" shm enc s fp

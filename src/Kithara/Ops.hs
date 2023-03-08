@@ -33,6 +33,8 @@ class Oscillator a where
     -- pattern with sharp corners hence the name.
     sawSharp :: Samples -> Volume -> a -> Sound
 
+-- class Envelope a where
+
 instance Oscillator Note where
     oscillate f s v n = map (\t -> v * f freq t samples') [0.0 .. dur]
         where

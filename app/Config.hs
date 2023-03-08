@@ -18,9 +18,6 @@ volume = 0.2
 samples :: Samples
 samples = 44100
 
-a4Base :: Hz
-a4Base = 440.0
-
 beatsPerMinute :: Beats
 beatsPerMinute = 120
 
@@ -32,3 +29,17 @@ showMode = 1
 
 fileEncoding :: String
 fileEncoding = "f32le"
+
+
+-- Actual sound frequences start here
+a4Base :: Hz
+a4Base = 440.0
+
+c5 :: Hz
+c5 = 523.25
+
+e5 :: Hz
+e5 = 659.25
+
+g5 :: Hz
+g5 = 783.99
