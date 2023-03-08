@@ -9,6 +9,7 @@ spec :: Spec
 spec = do
     describe "fmod" $ do
         it "calculates `mod` on Float values like fmod in C++" $ do
+            -- TODO: make an utility function for reading these values from a file
             fmod 1.9    0.8    `shouldBe` 0.29999995
             fmod (-1.9) 0.8    `shouldBe` (-0.29999995)
             fmod 1.9    (-0.8) `shouldBe` 0.29999995

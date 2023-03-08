@@ -6,29 +6,54 @@ import System.Process (runCommand)
 import Text.Printf (printf)
 import Data.Foldable (fold, foldl')
 
+-- |Amplitude of an underlying soundwave.
 type Volume      = Float
+-- |Frequency of an underlying soundwave.
 type Hz          = Float
+-- |Duration of a sound.
 type Seconds     = Float
+-- |Value of a soundwave at a certain point in time.
 type Oscillation = Float
+-- |Discretized representation of a soundwave.
 type Sound       = [Oscillation]
+-- |How many discretization points are used to
+-- represent one second of a sound.
 type Samples     = Int
+-- |How many /beats/ there are in a minute.
+-- This is a human-level definition.
+-- A Quarter Note defaults to one beat. For example,
+-- if a music writer sets 120 /beats per minute/,
+-- then Quarter Note is \(\frac{60}{120} = 0.5\) seconds.
 type Beats       = Int
 
+-- |Note is a combination of frequency and duration.
 data Note = Note { frequency :: Hz, duration :: Seconds }
     deriving (Show)
 
+-- |Waves can come in a form of sinusoids but not only.
 class Oscillator a where
+    -- |Basic primitive that helps to define common waveshapes by taking
+    -- a function which encodes the waveshape as the first argument.
     oscillate :: (Hz -> Seconds -> Float -> Oscillation) -> Volume -> a -> Sound
 
+    -- |Simple \(sin\) function.
     sinusoid :: Volume -> a -> Sound
+    -- |[Square wave](https://en.wikipedia.org/wiki/Square_wave).
     square :: Volume -> a -> Sound
+    -- |[Triangle wave](https://en.wikipedia.org/wiki/Triangle_wave).
     triangle :: Volume -> a -> Sound
+    -- |[Sawtooth wave](https://en.wikipedia.org/wiki/Sawtooth_wave).
     sawSmooth :: Int -> Volume -> a -> Sound
+    -- |Like a sawtooth but easier and faster to compute. Gives a triangular
+    -- pattern with sharp corners hence the name.
     sawSharp :: Volume -> a -> Sound
 
+-- |Frequently used combination.
 sinFT :: Hz -> Seconds -> Float -> Oscillation
 sinFT freq t samples' = sin $ freq * t / samples'
 
+-- |Calculates /mod/ on Float values
+-- like [fmod](https://en.cppreference.com/w/cpp/numeric/math/fmod) in C++.
 fmod :: Float -> Float -> Float
 fmod n 0 = error "Exception: Ratio has zero denominator"
 fmod n d = n - dt
