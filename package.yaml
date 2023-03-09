@@ -38,6 +38,7 @@ library:
   dependencies:
   - bytestring
   - process
+  - random
 
 executables:
   kithara-exe:

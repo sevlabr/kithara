@@ -10,6 +10,7 @@ module Kithara.Ops where
 import Kithara.Types
 import Kithara.Utils
 import Data.Foldable (foldl')
+import Control.Monad (replicateM)
 
 -- |Waves can come in a form of sinusoids but not only.
 class Oscillator a where
@@ -32,8 +33,9 @@ class Oscillator a where
     -- |Like a sawtooth but easier and faster to compute. Gives a triangular
     -- pattern with sharp corners hence the name.
     sawSharp :: Samples -> Volume -> a -> Sound
-
--- class Envelope a where
+    -- |Random noise. Only duration is taken from the given note,
+    -- frequency is omitted.
+    noise :: Samples -> Volume -> a -> IO Sound
 
 instance Oscillator Note where
     oscillate f s v n = map (\t -> v * f freq t samples') [0.0 .. dur]
@@ -75,3 +77,7 @@ instance Oscillator Note where
             f fq t s' = (pi / 2) - fq' * pi * (fmod (t / s') (1.0 / fq'))
                 where
                     fq' = fq / (2 * pi)
+    
+    noise s v n = replicateM len (genRandNoise (-v) v)
+        where
+            len = 1 + (round $ duration n * fromIntegral s)

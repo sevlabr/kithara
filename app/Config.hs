@@ -12,6 +12,9 @@ import Kithara.Utils (quarterDuration)
 outFileName :: FilePath
 outFileName = "output.bin"
 
+outNoisesFileName :: FilePath
+outNoisesFileName = "withNoises.bin"
+
 volume :: Volume
 volume = 0.2
 

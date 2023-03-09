@@ -32,6 +32,13 @@ saveByteStringSound fp bs = BSLazy.writeFile fp bs
 saveSong :: Sound -> FilePath -> IO ()
 saveSong s fp = saveByteStringSound fp (soundToByteString s)
 
+-- |Saves song that includes randomly generated noises
+-- and has type 'IO' 'Sound' because of that.
+saveSongWithNoises :: IO Sound -> FilePath -> IO ()
+saveSongWithNoises s fp = do
+    s' <- s
+    saveSong s' fp
+
 -- |Play a sound stored in a file with provided path using
 -- [ffplay](https://ffmpeg.org/ffplay.html).
 playSong :: FilePath

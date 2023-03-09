@@ -7,6 +7,7 @@ module Kithara.Utils where
 
 import Kithara.Types
 import Data.Foldable (foldl')
+import System.Random.Stateful (globalStdGen, uniformRM)
 
 -- |Frequently used combination.
 sinFT :: Hz -> Seconds -> Float -> Oscillation
@@ -42,3 +43,7 @@ chord sounds | checkLen sounds = foldl' (zipWith (+)) (replicate len 0.0) sounds
 -- |Get Quarter Note duration in seconds.
 quarterDuration :: Beats -> Seconds
 quarterDuration bpm = 60.0 / (fromIntegral bpm)
+
+-- |Generates random number in Float range @[l .. r]@.
+genRandNoise :: Float -> Float -> IO Float
+genRandNoise l r = uniformRM (l, r) globalStdGen
