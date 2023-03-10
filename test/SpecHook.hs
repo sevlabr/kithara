@@ -1,6 +1,6 @@
-module SpecHook where
+module SpecHook (hook) where
 
-import Test.Hspec
+import Test.Hspec (Spec, parallel)
 
 hook :: Spec -> Spec
 hook = parallel

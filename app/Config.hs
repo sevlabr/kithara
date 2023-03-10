@@ -4,7 +4,12 @@ Description : Default constant parameters.
 Default constant parameters that are used to produce a sound
 which you can hear by running the executable kithara-exe.
 -}
-module Config where
+module Config (
+    outFileName, outNoisesFileName,
+    volume, samples, quarterDur,
+    showMode, fileEncoding,
+    a4Base, c5, e5, g5
+) where
 
 import Kithara.Types
 import Kithara.Utils (quarterDuration)

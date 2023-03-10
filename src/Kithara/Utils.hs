@@ -3,7 +3,14 @@ Description : Helper functions.
 
 Helper functions.
 -}
-module Kithara.Utils where
+module Kithara.Utils (
+    sinFT, fmod,
+    genRandNoise,
+    splitAtPositions,
+    compose, chord,
+    quarterDuration,
+    readADSR
+) where
 
 import Kithara.Types
 import Data.Foldable (foldl')

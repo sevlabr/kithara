@@ -3,7 +3,12 @@ Description : Basic types to represent sounds.
 
 Basic types to represent sounds.
 -}
-module Kithara.Types where
+module Kithara.Types (
+    Volume, Hz, Seconds, Oscillation,
+    Sound,
+    Samples, Beats,
+    Note(..), ADSR(..)
+) where
 
 -- |Amplitude of an underlying soundwave.
 type Volume      = Float

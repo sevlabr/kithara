@@ -7,7 +7,10 @@ This module contains basic primitives to create sounds.
 For example, 'Oscillator' is used to define a certain shapes
 of soundwaves.
 -}
-module Kithara.Ops where
+module Kithara.Ops (
+    Oscillator(..),
+    Envelope(..)
+) where
 
 import Kithara.Types
 import Kithara.Utils

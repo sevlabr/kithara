@@ -4,7 +4,9 @@ Description : Define sounds for the executable.
 Sounds that will be produced if running kithara-exe.
 The final sound sequence is 'song' and alike.
 -}
-module Sounds where
+module Sounds (
+    song, noisySong
+) where
 
 import Config
 import Kithara.Types

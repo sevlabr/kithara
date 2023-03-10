@@ -6,7 +6,11 @@ in the context of a sound creation.
 Examples include converting a melody to a ByteString ('soundToByteString')
 and playing it via [ffplay](https://ffmpeg.org/ffplay.html) ('playSong').
 -}
-module Kithara.IO where
+module Kithara.IO (
+    soundToByteString, saveByteStringSound,
+    saveSong, saveSongWithNoises,
+    playSong
+) where
 
 import Kithara.Types
 import qualified Data.ByteString.Builder as BSBuilder
