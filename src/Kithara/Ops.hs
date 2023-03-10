@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-|
 Description : Operations to produce sounds.
 
@@ -36,6 +38,15 @@ class Oscillator a where
     -- |Random noise. Only duration is taken from the given note,
     -- frequency is omitted.
     noise :: Samples -> Volume -> a -> IO Sound
+
+-- |Raw soundwave sounds unnatural because the amplitude is growing and decaying
+-- instantly, whereas real musical instruments change their volume continiously.
+-- [Envelope](https://en.wikipedia.org/wiki/Envelope_\(music\))
+-- describes these changes over time.
+class Envelope a where
+    -- |Given 'ADSR' envelope specification, modify amplitude of
+    -- a provided signal of type /a/.
+    transformToADSR :: Samples -> a -> ADSR -> a
 
 instance Oscillator Note where
     oscillate f s v n = map (\t -> v * f freq t samples') [0.0 .. dur]
@@ -81,3 +92,53 @@ instance Oscillator Note where
     noise s v n = replicateM len (genRandNoise (-v) v)
         where
             len = 1 + (round $ duration n * fromIntegral s)
+
+instance Envelope Sound where
+    transformToADSR samp sound adsr | enoughLen = toADSR sound
+                                    | otherwise = error errMsg
+        where
+            errMsg = "Exception: transformToADSR: the sound isn't long enough for this ADSR."
+            (at, dt, rt, aAmpl, sAmpl) = readADSR adsr
+            samp' = fromIntegral samp
+            sFullDur = (fromIntegral $ length sound) / samp'
+            enoughLen = at + dt + 0.001 + rt <= sFullDur
+
+            toADSR :: Sound -> Sound
+            toADSR sound' = compose [att attS, dec decS, sust sustS, rel relS]
+                where
+                    (ats, dts, rts) =
+                        let
+                            ts = map (\t -> round $ t * samp') [at, dt, rt]
+                        in
+                            (ts!!0, ts!!1, ts!!2)
+
+                    sts = length sound' - sum [ats, dts, rts] - 1
+                    allTs = [ats, dts, sts, rts + 1] -- add 1 to include last point with value 0
+                    (attS, decS, sustS, relS) =
+                        let
+                            adsrParts = splitAtPositions allTs sound'
+                        in
+                            (adsrParts!!0, adsrParts!!1, adsrParts!!2, adsrParts!!3)
+
+                    genTRange tDur = [0.0 .. fromIntegral tDur - 1.0]
+
+                    att :: Sound -> Sound
+                    att attS' = zipWith att' attS' (genTRange ats)
+                        where
+                            att' sv t = sv * aAmpl * (t' / at) where t' = t / samp'
+
+                    dec :: Sound -> Sound
+                    dec decS' = zipWith dec' decS' (genTRange dts)
+                        where
+                            dec' sv t = sv * (aAmpl + amplDiff * (t' / dt))
+                                where
+                                    t' = t / samp'
+                                    amplDiff = sAmpl - aAmpl
+
+                    sust :: Sound -> Sound
+                    sust = map (* sAmpl) 
+
+                    rel :: Sound -> Sound
+                    rel relS' = zipWith rel' relS' [0.0 .. fromIntegral rts]
+                        where
+                            rel' sv t = sv * sAmpl * (1 - (t' / rt)) where t' = t / samp'

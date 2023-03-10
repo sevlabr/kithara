@@ -27,4 +27,15 @@ type Beats       = Int
 
 -- |Note is a combination of frequency and duration.
 data Note = Note { frequency :: Hz, duration :: Seconds }
-    deriving (Show)
+    deriving (Show, Eq)
+
+-- |Contains instrument-specific information about
+-- [ADSR](https://en.wikipedia.org/wiki/Envelope_\(music\)\#ADSR)
+-- envelope. This is used to modify an amplitude of 
+-- a raw soundwave to make it sound more natural.
+data ADSR = ADSR { attack           :: Seconds,
+                   decay            :: Seconds,
+                   release          :: Seconds,
+                   attackAmplitude  :: Volume,
+                   sustainAmplitude :: Volume
+                 } deriving (Show, Eq)

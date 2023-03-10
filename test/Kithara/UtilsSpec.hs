@@ -33,6 +33,18 @@ spec = do
                     else
                         True -- checked d = 0 case above
     
+    describe "splitAtPositions" $ do
+        it "passes edge cases" $ do
+            splitAtPositions []        ([] :: [Int]) `shouldBe` ([] :: [[Int]])
+            splitAtPositions [1, 2, 3] ([] :: [Int]) `shouldBe` ([] :: [[Int]])
+            splitAtPositions []        ['c', 'a']    `shouldBe` [['c', 'a']]
+        
+        it "splits a list at a given positions" $ do
+            splitAtPositions [1, 2, 2]  [0, 1, 2, 3, 6]                `shouldBe` [[0], [1, 2], [3, 6]]
+            splitAtPositions [1, 2, 10] [0, 1, 2, 3, 6]                `shouldBe` [[0], [1, 2], [3, 6]]
+            splitAtPositions [1, 2, 2]  ['a', 'b', 'c', 'd', 'e', 'f'] `shouldBe` [['a'], ['b', 'c'], ['d', 'e'], ['f']]
+            splitAtPositions [2]        [1.0, 2.3, 4.5, 1.2, 0.0]      `shouldBe` [[1.0, 2.3], [4.5, 1.2, 0.0]]
+
     describe "compose" $ do
         it "concatenates 'sounds' in time" $ do
             let makeSound' lst = map sin lst

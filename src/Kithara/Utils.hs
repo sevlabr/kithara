@@ -19,13 +19,46 @@ fmod :: Float -> Float -> Float
 fmod _ 0 = error "Exception: fmod: Ratio has zero denominator!"
 fmod n d = n - dt
     where
-        t = truncate $ n / d
+        t = (truncate $ n / d) :: Integer
         dt = d * fromIntegral t
+
+-- |Generates random number in Float range @[l .. r]@.
+-- 'globalStdGen' is used for generation.
+genRandNoise :: Float -> Float -> IO Float
+genRandNoise l r = uniformRM (l, r) globalStdGen
+
+-- |Split a given list at a given positions.
+-- Each position is relative, meaning that if
+-- positions are @[1,2]@ the list will be splitted
+-- after the 1st element and the 3rd, not the 2nd one.
+-- 
+-- Examples:
+--
+-- >>> splitAtPositions [1,2] [1,2,3,4,5]
+-- [[1],[2,3],[4,5]]
+-- 
+-- >>> splitAtPositions [1,3,1] [1,2,3,4,5]
+-- [[1],[2,3,4],[5]]
+-- 
+-- >>> splitAtPositions [1,3,100] [1,2,3,4,5]
+-- [[1],[2,3,4],[5]]
+-- 
+-- >>> splitAtPositions [3] [1,2,3,4,5]
+-- [[1,2,3],[4,5]]
+splitAtPositions :: [Int] -> [a] -> [[a]]
+splitAtPositions _      [] = []
+splitAtPositions []     l  = [l]
+splitAtPositions (p:ps) l  =
+    let
+        (h, t) = splitAt p l
+        -- ps' = map (\p' -> p' - length h) ps
+    in
+        h : splitAtPositions ps t
 
 -- |Combine consecutive sounds into one,
 -- i.e. each sound plays alone at a given point in time.
 compose :: [Sound] -> Sound
-compose sounds = concat sounds
+compose = concat
 
 -- |Combine sounds to make a chord,
 -- i.e. all sounds are playing together at a given point in time.
@@ -44,6 +77,12 @@ chord sounds | checkLen sounds = foldl' (zipWith (+)) (replicate len 0.0) sounds
 quarterDuration :: Beats -> Seconds
 quarterDuration bpm = 60.0 / (fromIntegral bpm)
 
--- |Generates random number in Float range @[l .. r]@.
-genRandNoise :: Float -> Float -> IO Float
-genRandNoise l r = uniformRM (l, r) globalStdGen
+-- |Unpack 'ADSR' characteristics.
+readADSR :: ADSR
+         -> ( Seconds, Seconds, Seconds
+            , Volume, Volume
+            )
+readADSR adsr = (at, dt, rt, aAmpl, sAmpl)
+    where
+        (at, dt, rt)   = (attack adsr, decay adsr, release adsr)
+        (aAmpl, sAmpl) = (attackAmplitude adsr, sustainAmplitude adsr)

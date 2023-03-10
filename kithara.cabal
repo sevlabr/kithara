@@ -59,6 +59,7 @@ test-suite kithara-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Kithara.OpsSpec
       Kithara.UtilsSpec
       SpecHook
       Paths_kithara

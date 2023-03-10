@@ -10,7 +10,6 @@ import Config
 import Kithara.Types
 import Kithara.Ops
 import Kithara.Utils (compose, chord)
-import GHC.Base (returnIO)
 
 -- Notes
 a4Quarter :: Note
@@ -24,6 +23,15 @@ e5Quarter = Note { frequency = e5, duration = quarterDur }
 
 g5Quarter :: Note
 g5Quarter = Note { frequency = g5, duration = quarterDur }
+
+-- ADSRs
+basicADSR :: ADSR
+basicADSR = ADSR { attack           = 0.08,
+                   decay            = 0.02,
+                   release          = 0.12,
+                   attackAmplitude  = 1.0,
+                   sustainAmplitude = 0.8
+                 }
 
 -- Different wave shapes
 a4QuarterSound :: Sound
@@ -58,12 +66,37 @@ g5QuarterSound = sinusoid samples volume g5Quarter
 c5QuarterMajorTriad :: Sound
 c5QuarterMajorTriad = chord [c5QuarterSound, e5QuarterSound, g5QuarterSound]
 
+-- ADSR envelope sounds
+a4QuarterADSRSound :: Sound
+a4QuarterADSRSound = transformToADSR samples a4QuarterSound basicADSR
+
+c5QuarterADSRSound :: Sound
+c5QuarterADSRSound = transformToADSR samples c5QuarterSound basicADSR
+
+e5QuarterADSRSound :: Sound
+e5QuarterADSRSound = transformToADSR samples e5QuarterSound basicADSR
+
+g5QuarterADSRSound :: Sound
+g5QuarterADSRSound = transformToADSR samples g5QuarterSound basicADSR
+
+c5QuarterMajorTriadADSR :: Sound
+c5QuarterMajorTriadADSR = chord [c5QuarterADSRSound, e5QuarterADSRSound, g5QuarterADSRSound]
+
+c5QuarterMajorTriadADSR' :: Sound
+c5QuarterMajorTriadADSR' = transformToADSR samples c5QuarterMajorTriad basicADSR
+
 -- Sounds for executable
 song :: Sound
 song = compose [a4QuarterSound, a4QuarterSoundSquare,
                 a4QuarterSoundTriangle, a4QuarterSound,
                 a4QuarterSoundSawSmooth5, a4QuarterSoundSawSharp,
-                c5QuarterMajorTriad, c5QuarterMajorTriad]
+                c5QuarterMajorTriad, c5QuarterMajorTriadADSR,
+                a4QuarterSound, a4QuarterADSRSound,
+                c5QuarterSound, c5QuarterADSRSound,
+                e5QuarterSound, e5QuarterADSRSound,
+                g5QuarterSound, g5QuarterADSRSound,
+                c5QuarterMajorTriadADSR, c5QuarterMajorTriadADSR,
+                c5QuarterMajorTriadADSR', c5QuarterMajorTriadADSR']
 
 noisySong :: IO Sound
 noisySong = do
