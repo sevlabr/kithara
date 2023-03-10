@@ -33,6 +33,8 @@ data Note = Note { frequency :: Hz, duration :: Seconds }
 -- [ADSR](https://en.wikipedia.org/wiki/Envelope_\(music\)\#ADSR)
 -- envelope. This is used to modify an amplitude of 
 -- a raw soundwave to make it sound more natural.
+-- __Note__: this can be also used to produce /AR/ and /ADR/
+-- envelopes.
 data ADSR = ADSR { attack           :: Seconds,
                    decay            :: Seconds,
                    release          :: Seconds,

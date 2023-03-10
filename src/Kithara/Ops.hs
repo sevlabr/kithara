@@ -101,7 +101,7 @@ instance Envelope Sound where
             (at, dt, rt, aAmpl, sAmpl) = readADSR adsr
             samp' = fromIntegral samp
             sFullDur = (fromIntegral $ length sound) / samp'
-            enoughLen = at + dt + 0.001 + rt <= sFullDur
+            enoughLen = at + dt + rt <= sFullDur
 
             toADSR :: Sound -> Sound
             toADSR sound' = compose [att attS, dec decS, sust sustS, rel relS]
@@ -113,7 +113,8 @@ instance Envelope Sound where
                             (ts!!0, ts!!1, ts!!2)
 
                     sts = length sound' - sum [ats, dts, rts] - 1
-                    allTs = [ats, dts, sts, rts + 1] -- add 1 to include last point with value 0
+                    -- add 1 to 'rts' to include last point with value 0
+                    allTs = [ats, dts, sts, rts + 1]
                     (attS, decS, sustS, relS) =
                         let
                             adsrParts = splitAtPositions allTs sound'
