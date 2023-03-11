@@ -28,13 +28,14 @@ ghc-options:
 - -Widentities
 - -Wincomplete-record-updates
 - -Wincomplete-uni-patterns
-- -Wmissing-export-lists
 - -Wmissing-home-modules
 - -Wpartial-fields
 - -Wredundant-constraints
 
 library:
   source-dirs: src
+  ghc-options:
+  - -Wmissing-export-lists
   dependencies:
   - bytestring
   - process
@@ -45,6 +46,7 @@ executables:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
+    - -Wmissing-export-lists
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
@@ -67,6 +69,7 @@ tests:
     main:                DocTest.hs
     source-dirs:         doc-test
     ghc-options:
+    - -Wmissing-export-lists
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
@@ -78,6 +81,7 @@ tests:
     main:                HLint.hs
     source-dirs:         linting
     ghc-options:
+    - -Wmissing-export-lists
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
@@ -89,6 +93,7 @@ benchmarks:
     main:                Bench.hs
     source-dirs:         bench
     ghc-options:
+    - -Wmissing-export-lists
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N

@@ -1,7 +1,7 @@
 module Main (main) where
 
 import Kithara.IO
-import Sounds (song, noisySong)
+import Sounds (song)
 import Config
 
 main :: IO ()
