@@ -79,7 +79,7 @@ tests:
     dependencies:
     - doctest
     - Glob
-    - random
+    - kithara
   
   hlint:
     main:                HLint.hs
