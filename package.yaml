@@ -79,6 +79,7 @@ tests:
     dependencies:
     - doctest
     - Glob
+    - random
   
   hlint:
     main:                HLint.hs
