@@ -1,5 +1,6 @@
 .stack-work/
 *~
+
 output.bin
 withNoises.bin
 TODO
