@@ -64,7 +64,9 @@ tests:
     dependencies:
     - kithara
     - hspec
-    - hspec-discover
+    verbatim:
+      build-tool-depends:
+        hspec-discover:hspec-discover == 2.*
 
   doctest:
     main:                DocTest.hs
