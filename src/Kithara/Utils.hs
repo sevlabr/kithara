@@ -82,7 +82,7 @@ chord sounds | checkLen sounds = foldl' (zipWith (+)) (replicate len 0.0) sounds
 
 -- |Get Quarter Note duration in seconds.
 quarterDuration :: Beats -> Seconds
-quarterDuration bpm = 60.0 / (fromIntegral bpm)
+quarterDuration bpm = 60.0 / fromIntegral bpm
 
 -- |Unpack 'ADSR' characteristics.
 readADSR :: ADSR

@@ -28,10 +28,8 @@ spec = do
             evaluate (fmod 1.9 0.0) `shouldThrow` anyException
 
         prop "idempotency" $
-            \n d -> if d /= 0 then
-                       fmod n d == fmod (fmod n d) d
-                    else
-                        True -- checked d = 0 case above
+            -- Note: checked d = 0 case above
+            \n d -> d == 0 || (fmod n d == fmod (fmod n d) d)
     
     describe "splitAtPositions" $ do
         it "passes edge cases" $ do
@@ -47,8 +45,8 @@ spec = do
 
     describe "compose" $ do
         it "concatenates 'sounds' in time" $ do
-            let makeSound' lst = map sin lst
-            let s1 = makeSound' [0.2, (-1.2), 0.0, 1e-11, 3e+11]
+            let makeSound' = map sin
+            let s1 = makeSound' [0.2, -1.2, 0.0, 1e-11, 3e+11]
             let s2 = makeSound' $ replicate (length s1) 0.0
             let s3 = makeSound' [1, 2]
             let s4 = makeSound' [5]
@@ -67,7 +65,7 @@ spec = do
             evaluate (chord [[], []]) `shouldThrow` anyException
 
         it "sums 'sounds' for the same time interval" $ do
-            chord [[1, 2, 3], [(-1.2), 0.6, 0.0]] `shouldBe` [(-0.20000005), 2.6, 3.0]
+            chord [[1, 2, 3], [-1.2, 0.6, 0.0]] `shouldBe` [-0.20000005, 2.6, 3.0]
     
     describe "quarterDuration" $ do
         it "calculates Quarter Note duration in seconds" $ do

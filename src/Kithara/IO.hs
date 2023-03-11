@@ -30,7 +30,7 @@ soundToByteString s = BSBuilder.toLazyByteString $ fold builders
 -- [BSLazy.ByteString](https://hackage.haskell.org/package/bytestring-0.11.4.0/docs/Data-ByteString-Lazy.html#t:ByteString)
 -- to a file with provided path.
 saveByteStringSound :: FilePath -> BSLazy.ByteString -> IO ()
-saveByteStringSound fp bs = BSLazy.writeFile fp bs
+saveByteStringSound = BSLazy.writeFile
 
 -- |Save 'Kithara.Sound' to a file with provided path.
 saveSong :: Sound -> FilePath -> IO ()

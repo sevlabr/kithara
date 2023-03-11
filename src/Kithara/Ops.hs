@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-|
 Description : Operations to produce sounds.
@@ -54,20 +53,20 @@ class Envelope a where
 instance Oscillator Note where
     oscillate f s v n = map (\t -> v * f freq t samples') [0.0 .. dur]
         where
-            freq     = 2 * pi * (frequency n)
+            freq     = 2 * pi * frequency n
             samples' = fromIntegral s
             dur      = duration n * samples'
 
-    sinusoid s v n = oscillate f s v n
+    sinusoid = oscillate f
         where
             f = sinFT
     
-    square s v n = oscillate f s v n
+    square = oscillate f
         where
             -- point-free: ((signum .) .) . sinFT
             f fq t s' = signum $ sinFT fq t s'
 
-    triangle s v n = oscillate f s v' n
+    triangle s v = oscillate f s v'
         where
             f fq t s' = asin $ sinFT fq t s'
             v' = (2 / pi) * v
@@ -83,18 +82,18 @@ instance Oscillator Note where
             genWave i = oscillate f s 1.0 n
                 where
                     i' = fromIntegral i
-                    f fq t s' = (sin $ i' * fq * t / s') / i'
+                    f fq t s' = sin (i' * fq * t / s') / i'
     
-    sawSharp s v n = oscillate f s v' n
+    sawSharp s v = oscillate f s v'
         where
             v' = (2 / pi) * v
-            f fq t s' = (pi / 2) - fq' * pi * (fmod (t / s') (1.0 / fq'))
+            f fq t s' = (pi / 2) - fq' * pi * fmod (t / s') (1.0 / fq')
                 where
                     fq' = fq / (2 * pi)
     
     noise s v n = replicateM len (genRandNoise (-v) v)
         where
-            len = 1 + (round $ duration n * fromIntegral s)
+            len = 1 + round (duration n * fromIntegral s)
 
 instance Envelope Sound where
     transformToADSR samp sound adsr | enoughLen = toADSR sound
@@ -103,7 +102,7 @@ instance Envelope Sound where
             errMsg = "Exception: transformToADSR: the sound isn't long enough for this ADSR."
             (at, dt, rt, aAmpl, sAmpl) = readADSR adsr
             samp' = fromIntegral samp
-            sFullDur = (fromIntegral $ length sound) / samp'
+            sFullDur = fromIntegral (length sound) / samp'
             enoughLen = at + dt + rt <= sFullDur
 
             toADSR :: Sound -> Sound
@@ -113,7 +112,7 @@ instance Envelope Sound where
                         let
                             ts = map (\t -> round $ t * samp') [at, dt, rt]
                         in
-                            (ts!!0, ts!!1, ts!!2)
+                            (head ts, ts!!1, ts!!2)
 
                     sts = length sound' - sum [ats, dts, rts] - 1
                     -- add 1 to 'rts' to include last point with value 0
@@ -122,7 +121,7 @@ instance Envelope Sound where
                         let
                             adsrParts = splitAtPositions allTs sound'
                         in
-                            (adsrParts!!0, adsrParts!!1, adsrParts!!2, adsrParts!!3)
+                            (head adsrParts, adsrParts!!1, adsrParts!!2, adsrParts!!3)
 
                     genTRange tDur = [0.0 .. fromIntegral tDur - 1.0]
 

@@ -9,7 +9,7 @@ spec :: Spec
 spec = do
     describe "transformToADSR" $ do
         it "changes an amplitude of a given sound to ADSR pattern" $ do
-            let sound = (replicate 15 1.0) :: Sound
+            let sound = replicate 15 1.0 :: Sound
             let samples = 10
             let bADSR = ADSR { attack           = 0.2,
                                decay            = 0.2,
@@ -33,13 +33,13 @@ spec = do
             length realResult' `shouldBe` length result'
             realResult'        `shouldBe` result'
 
-            let sound' = (replicate 153123 1.0) :: Sound
+            let sound' = replicate 153123 1.0 :: Sound
             let samples' = 48923
             let realResult'' = transformToADSR samples' sound' bADSR'
             length realResult'' `shouldBe` length sound'
         
         it "throws an exception when ADSR is too long for the sound" $ do
-            let sound = (replicate 17 0.42) :: Sound
+            let sound = replicate 17 0.42 :: Sound
             let samples = 1400
             let badADSR = ADSR { attack           = 0.19,
                                  decay            = 0.7,
@@ -48,10 +48,10 @@ spec = do
                                  sustainAmplitude = 0.15
                                }
             let result = transformToADSR samples sound badADSR
-            evaluate (result) `shouldThrow` anyException
+            evaluate result `shouldThrow` anyException
         
         it "changes an amplitude of a given sound to AR pattern" $ do
-            let sound = (replicate 15 1.0) :: Sound
+            let sound = replicate 15 1.0 :: Sound
             let samples = 10
             let ar = ADSR { attack           = 0.745,
                             decay            = 0.01,
@@ -67,7 +67,7 @@ spec = do
             let realResult = transformToADSR samples sound ar
             realResult `shouldBe` result
 
-            let sound' = (replicate 44100 1.0) :: Sound
+            let sound' = replicate 44100 1.0 :: Sound
             let samples' = 44100
             let ar' = ADSR { attack           = 0.5,
                              decay            = 0.0,
@@ -87,7 +87,7 @@ spec = do
             realResult''!!4410 `shouldBe`    1.0
         
         it "changes an amplitude of a given sound to ADR pattern" $ do
-            let sound = (replicate 24 1.0) :: Sound
+            let sound = replicate 24 1.0 :: Sound
             let samples = 8
             let adr = ADSR { attack           = 1.0,
                              decay            = 1.0,
