@@ -96,6 +96,7 @@ test-suite kithara-test
   build-depends:
       base >=4.7 && <5
     , hspec
+    , hspec-discover
     , kithara
   default-language: Haskell2010
 

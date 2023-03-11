@@ -64,6 +64,7 @@ tests:
     dependencies:
     - kithara
     - hspec
+    - hspec-discover
 
   doctest:
     main:                DocTest.hs

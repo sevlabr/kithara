@@ -76,15 +76,15 @@ spec = do
                              sustainAmplitude = 1.0
                            }
             let realResult' = transformToADSR samples' sound' ar'
-            realResult'!!22051 `shouldNotBe` 1.0
-            realResult'!!22049 `shouldNotBe` 1.0
-            realResult'!!22050 `shouldBe`    1.0
+            realResult' !! 22051 `shouldNotBe` 1.0
+            realResult' !! 22049 `shouldNotBe` 1.0
+            realResult' !! 22050 `shouldBe`    1.0
 
             let ar'' = ar' { attack = 0.1, release = 0.9 }
             let realResult'' = transformToADSR samples' sound' ar''
-            realResult''!!4411 `shouldNotBe` 1.0
-            realResult''!!4409 `shouldNotBe` 1.0
-            realResult''!!4410 `shouldBe`    1.0
+            realResult'' !! 4411 `shouldNotBe` 1.0
+            realResult'' !! 4409 `shouldNotBe` 1.0
+            realResult'' !! 4410 `shouldBe`    1.0
         
         it "changes an amplitude of a given sound to ADR pattern" $ do
             let sound = replicate 24 1.0 :: Sound
@@ -109,3 +109,13 @@ spec = do
                           ++ [1.5, 1.0, 0.5]
             let realResult' = transformToADSR samples sound adr'
             realResult' `shouldBe` result'
+    
+    describe "oscillate" $ do
+        it "calculates everithing correctly" $ do
+            let (vol, samp, freq, dur) = (0.58, 7, 1.23, 3.0) :: (Volume, Samples, Hz, Seconds)
+            let cos' fq t samp' = cos $ fq * t / samp'
+            let note = Note { frequency = freq, duration = dur }
+            let timePoint = 6 :: Int
+            let result = vol * cos (2 * pi * freq * (fromIntegral timePoint / fromIntegral samp))
+            let realResult = oscillate cos' samp vol note
+            realResult !! timePoint `shouldBe` result
