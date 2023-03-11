@@ -71,3 +71,19 @@ test-suite kithara-test
     , hspec
     , kithara
   default-language: Haskell2010
+
+benchmark kithara-bench
+  type: exitcode-stdio-1.0
+  main-is: Bench.hs
+  other-modules:
+      Kithara.OpsBench
+      Kithara.UtilsBench
+      Paths_kithara
+  hs-source-dirs:
+      bench
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , criterion
+    , kithara
+  default-language: Haskell2010

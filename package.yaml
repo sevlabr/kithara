@@ -62,3 +62,15 @@ tests:
     dependencies:
     - kithara
     - hspec
+
+benchmarks:
+  kithara-bench:
+    main:                Bench.hs
+    source-dirs:         bench
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - kithara
+    - criterion
