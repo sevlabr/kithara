@@ -2,6 +2,7 @@ module Kithara.OpsSpec (spec) where
 
 import Kithara.Ops
 import Kithara.Types
+import Kithara.Utils (fmod)
 import Test.Hspec
 import Control.Exception (evaluate)
 
@@ -149,6 +150,9 @@ spec = do
             let truncate' fl = truncate $ 6 * fl :: Integer
             truncate' (realResult !! timePoint) `shouldBe` truncate' result
         
-        -- it "sawSharp" $ do
-        --     let realResult = sawSharp samp vol note
-        --     realResult !! timePoint `shouldBe` result
+        it "sawSharp" $ do
+            let t = fromIntegral timePoint / fromIntegral samp :: Float
+            let modVal = fmod t (1.0 / freq)
+            let result = (vol * 2.0 / pi) * (pi / 2.0 - freq * pi * modVal)
+            let realResult = sawSharp samp vol note
+            realResult !! timePoint `shouldBe` result
