@@ -42,6 +42,11 @@ packages:
 #
 # extra-deps: []
 
+extra-deps:
+- hlint-3.5@sha256:545c91ceca22b0d81a399a65ad5231263ac3355a6502aa1192b11e41dccf248c,4375
+- ghc-lib-parser-9.4.4.20221225@sha256:65663de2c3791f8d03fb25123ae54aaba5d0cb21262680fcfb5d07e59fb4a573,14185
+- ghc-lib-parser-ex-9.4.0.0@sha256:a55b192642e1efd3fd3a358aff416e88b6b04f33572bd1d7be9e9008648f2523,3493
+
 # Override default flag values for local packages and extra-deps
 # flags: {}
 

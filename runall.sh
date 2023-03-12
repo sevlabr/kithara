@@ -17,6 +17,9 @@ bench_str="--bench --benchmark-arguments ${benchmark_args}"
 # create documentation (check the log for location and coverage info)
 haddock_str="--haddock"
 
+# clean some files before running to avoid errors
+rm kithara-bench.tix
+
 run_str="stack build ${test_str} ${bench_str} ${haddock_str} &> ${output_file}"
 printf "Running: ${run_str}\n\n"
 eval $run_str

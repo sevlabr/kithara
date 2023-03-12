@@ -110,12 +110,45 @@ spec = do
             let realResult' = transformToADSR samples sound adr'
             realResult' `shouldBe` result'
     
-    describe "oscillate" $ do
-        it "calculates everithing correctly" $ do
-            let (vol, samp, freq, dur) = (0.58, 7, 1.23, 3.0) :: (Volume, Samples, Hz, Seconds)
-            let cos' fq t samp' = cos $ fq * t / samp'
-            let note = Note { frequency = freq, duration = dur }
-            let timePoint = 6 :: Int
-            let result = vol * cos (2 * pi * freq * (fromIntegral timePoint / fromIntegral samp))
+    describe "simple tests for Oscillator" $ do
+        let (vol, samp, freq, dur) = (0.58, 7, 1.23, 3.0) :: (Volume, Samples, Hz, Seconds)
+        let note = Note { frequency = freq, duration = dur }
+        let timePoint = 6 :: Int
+        let arg = 2 * pi * freq * (fromIntegral timePoint / fromIntegral samp) :: Float
+
+        let cos' fq t samp' = cos $ fq * t / samp'
+
+        it "oscillate" $ do
+            let result = vol * cos arg
             let realResult = oscillate cos' samp vol note
             realResult !! timePoint `shouldBe` result
+        
+        it "sinusoid" $ do
+            let result = vol * sin arg
+            let realResult = sinusoid samp vol note
+            realResult !! timePoint `shouldBe` result
+        
+        it "square" $ do
+            let result = vol * signum (sin arg)
+            let realResult = square samp vol note
+            realResult !! timePoint `shouldBe` result
+        
+        it "triangle" $ do
+            let result = (vol * 2.0 / pi) * asin (sin arg)
+            let realResult = triangle samp vol note
+            realResult !! timePoint `shouldBe` result
+        
+        it "sawSmooth" $ do
+            let nTerms = 12 :: Int
+            let realResult = sawSmooth samp nTerms vol note
+
+            let indices = map fromIntegral [1 .. nTerms]
+            let sinSum = sum $ map (\k ->  sin (k * arg) / k) indices
+            let result = (vol * 2.0 / pi) * sinSum
+
+            let truncate' fl = truncate $ 6 * fl :: Integer
+            truncate' (realResult !! timePoint) `shouldBe` truncate' result
+        
+        -- it "sawSharp" $ do
+        --     let realResult = sawSharp samp vol note
+        --     realResult !! timePoint `shouldBe` result

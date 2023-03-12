@@ -79,7 +79,7 @@ test-suite hlint
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wmissing-export-lists -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
-    , hlint ==3.4.1
+    , hlint ==3.5
   default-language: Haskell2010
 
 test-suite kithara-test

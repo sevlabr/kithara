@@ -1,11 +1,14 @@
 .stack-work/
 *~
 
+# artifacts of an executable
 output.bin
 withNoises.bin
 
+# service files
 TODO
 
+# build, test, etc. artifacts
 bench.html
 runall.log
 kithara-bench.tix

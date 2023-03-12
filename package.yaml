@@ -89,7 +89,7 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hlint == 3.4.1
+    - hlint == 3.5
 
 benchmarks:
   kithara-bench:
