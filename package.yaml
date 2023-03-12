@@ -37,9 +37,9 @@ library:
   ghc-options:
   - -Wmissing-export-lists
   dependencies:
-  - bytestring
-  - process
-  - random
+  - bytestring == 0.11.4.0
+  - process    == 1.6.16.0
+  - random     == 1.2.1.1
 
 executables:
   kithara-exe:
@@ -63,10 +63,10 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - kithara
-    - hspec
+    - hspec   == 2.9.7
     verbatim:
       build-tool-depends:
-        hspec-discover:hspec-discover == 2.*
+        hspec-discover:hspec-discover == 2.9.7
 
   doctest:
     main:                DocTest.hs
@@ -77,9 +77,8 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - doctest
-    - Glob
-    - kithara
+    - doctest == 0.20.1
+    - Glob    == 0.10.2
   
   hlint:
     main:                HLint.hs
@@ -90,7 +89,7 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hlint
+    - hlint == 3.4.1
 
 benchmarks:
   kithara-bench:
@@ -103,4 +102,4 @@ benchmarks:
     - -with-rtsopts=-N
     dependencies:
     - kithara
-    - criterion
+    - criterion == 1.5.13.0
