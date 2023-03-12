@@ -7,6 +7,30 @@ import Control.Exception (evaluate)
 
 spec :: Spec
 spec = do
+    describe "noteFreq'" $ do
+        it "calculates frequencies correctly" $ do
+            noteFreq' 440 0     `shouldBe` 440.0
+            noteFreq' 440 (-57) `shouldBe` 16.351597
+            noteFreq' 440 50    `shouldBe` 7902.132
+            noteFreq' 432 50    `shouldBe` 7758.4565
+    
+    describe "noteFreq" $ do
+        it "calculates frequencies of given notes correctly" $ do
+            noteFreq 440 4 10 `shouldBe` 440.0
+            noteFreq 440 0 1  `shouldBe` 16.351597
+            noteFreq 440 8 12 `shouldBe` 7902.132
+            noteFreq 432 8 12 `shouldBe` 7758.4565
+            noteFreq 440 7 7  `shouldBe` 2959.9553
+            noteFreq 446 1 3  `shouldBe` 37.208664
+        
+        it "fails on octaves that aren't in [0 .. 8]" $ do
+            evaluate (noteFreq 440 (-1) 3) `shouldThrow` anyException
+            evaluate (noteFreq 440 9    3) `shouldThrow` anyException
+        
+        it "fails on notes that aren't in [1 .. 12]" $ do
+            evaluate (noteFreq 440 5 0)  `shouldThrow` anyException
+            evaluate (noteFreq 440 5 13) `shouldThrow` anyException
+
     describe "sinFT" $ do
         it "calculates sin(freq * t / samples)" $ do
             sinFT 0.2 0.11 100.0 `shouldBe` 2.2e-4

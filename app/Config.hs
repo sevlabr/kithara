@@ -12,7 +12,7 @@ module Config (
 ) where
 
 import Kithara.Types
-import Kithara.Utils (quarterDuration)
+import Kithara.Utils (quarterDuration, noteFreq)
 
 outFileName :: FilePath
 outFileName = "output.bin"
@@ -44,10 +44,10 @@ a4Base :: Hz
 a4Base = 440.0
 
 c5 :: Hz
-c5 = 523.25
+c5 = noteFreq a4Base 5 1
 
 e5 :: Hz
-e5 = 659.25
+e5 = noteFreq a4Base 5 5
 
 g5 :: Hz
-g5 = 783.99
+g5 = noteFreq a4Base 5 8
